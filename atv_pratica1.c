@@ -9,22 +9,26 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
+/*Flags do Modo de Verificação*/
 int ROTACAO = 0;
 int ESCALA = 0;
 int TRANSLACAO = 1;
 
+/*Valores Globais da Translação*/
 int VALOR_TRANLACAO_X = 0;
 int VALOR_TRANLACAO_Y = 0;
 
+/*Valores Globais da Rotação*/
 int VALOR_ROTACAO = 0;
 
+/*Valores Globais da Escala*/
 float VALOR_ESCALA = 0;
 
-#define COMECO_X 0 //10
-#define FIM_X 10 //20
-
-#define COMECO_Y 0 //20
-#define FIM_Y 10 //30
+/*Constantes do tamanho do Quadrado*/
+#define COMECO_X 0
+#define FIM_X 10
+#define COMECO_Y 0
+#define FIM_Y 10
 
 int init(void){
     //define a cor de fundo
@@ -36,13 +40,6 @@ int init(void){
 }
 
 void desenhaQuadrado (void){
-
-
-    /*Escala*/
-//    glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0); 
-//    glScalef(VALOR_ESCALA,VALOR_ESCALA,0.0); // faza escala
-//    glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0); 
-    
 
     glColor3f(1.0,0.0,0.0); // Altera o atributo de cor
     glBegin(GL_POLYGON);// desenha um quadrado
@@ -57,7 +54,7 @@ void desenhaQuadrado (void){
 }
 
 
-void catchKey(int key){
+void catchKey(int key, int x, int y){
 
         switch(key){
         case 116:
@@ -171,8 +168,8 @@ int display(void){
 
     desenhaQuadrado();
 
-    drawBitmapText((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2);
-    glFlush(); //desenha os comandos não executados
+    drawBitmapText((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2); //Desenha Texto na Tela
+    glFlush(); 
 }
 
 int main(int argc, char** argv){
