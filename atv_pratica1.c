@@ -9,39 +9,52 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
+/*Flags do Modo de Verificação*/
 int ROTACAO = 0;
 int ESCALA = 0;
-int TRANSLACAO = 0;
+int TRANSLACAO = 1;
 
-#define COMECO_X 10
-#define FIM_X 20
+/*Valores Globais da Translação*/
+int VALOR_TRANLACAO_X = 0;
+int VALOR_TRANLACAO_Y = 0;
 
-#define COMECO_Y 20
-#define FIM_Y 30
+/*Valores Globais da Rotação*/
+int VALOR_ROTACAO = 0;
+
+/*Valores Globais da Escala*/
+float VALOR_ESCALA = 0;
+
+/*Constantes do tamanho do Quadrado*/
+#define COMECO_X 0
+#define FIM_X 10
+#define COMECO_Y 0
+#define FIM_Y 10
 
 int init(void){
-    
     //define a cor de fundo
     glClearColor(1.0,1.0,1.0,0.0);
     //carrega a matriz de projeção
     glMatrixMode(GL_PROJECTION);
     //define projeção ortogonal 2D
-    gluOrtho2D(0.0,200.0,0.0,150.0);
+    gluOrtho2D(0.0,100.0,0.0,100.0);
 }
 
 void desenhaQuadrado (void){
 
     glColor3f(1.0,0.0,0.0); // Altera o atributo de cor
     glBegin(GL_POLYGON);// desenha um quadrado
+
         glVertex2f(COMECO_X,COMECO_Y);
         glVertex2f(COMECO_X,FIM_Y);
         glVertex2f(FIM_X,FIM_Y);
         glVertex2f(FIM_X,COMECO_Y);
+
     glEnd();
+    glutPostRedisplay();
 }
 
 
-void catchKey(int key){
+void catchKey(int key, int x, int y){
 
         switch(key){
         case 116:
@@ -72,47 +85,40 @@ void SpecialInput(int key, int x, int y){
 
         switch(key){
             case GLUT_KEY_UP:
-                glTranslatef(0,1,0);
+                VALOR_TRANLACAO_Y+=1;
             break;
             case GLUT_KEY_DOWN:
-                glTranslatef(0,-1,0);
+                VALOR_TRANLACAO_Y-=1;
             break;
             case GLUT_KEY_LEFT:
-                glTranslatef(-1, 0,0);
+                VALOR_TRANLACAO_X-=1;
 
             break;
             case GLUT_KEY_RIGHT:
-                glTranslatef(1, 0,0);
+                VALOR_TRANLACAO_X+=1;
             break;
         }
+        
     }else if(ROTACAO == 1){
 
         switch(key){
             case GLUT_KEY_LEFT:
-                glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0);
-                glRotatef(10,0,0,1);
-                glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0);
+                VALOR_ROTACAO += 10;
 
             break;
             case GLUT_KEY_RIGHT:
-                glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0);
-                glRotatef(-10,0,0,1);
-                glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0);
+                VALOR_ROTACAO -= 10;
             break;
         }
     }else if(ESCALA == 1){
 
         switch(key){
             case GLUT_KEY_UP:
-                glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0); // ponto fixo para a p o s i ção o r i g i n a l
-                glScalef(2.0,2.0,0.0); // faza escala
-                glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0); // ponto fixo para a origem
+                VALOR_ESCALA += 2.0;
 
             break;
             case GLUT_KEY_DOWN:
-                glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0); // ponto fixo para a p o s i ção o r i g i n a l
-                glScalef(0.5,0.5,0.0); // faza escala
-                glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0); // ponto fixo para a origem
+                VALOR_ESCALA -= 0.5;
             break;
         }
     }
@@ -121,7 +127,7 @@ void SpecialInput(int key, int x, int y){
 
 void drawBitmapText(float x,float y) {
 
-    glColor3f(0.0f,0.0f,0.0f);//Vermelho
+    glColor3f(0.0f,0.0f,0.0f);
 	glRasterPos2f(x, y);
     
     if(ESCALA == 1){
@@ -139,13 +145,30 @@ int display(void){
     
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     glutKeyboardFunc(catchKey);
     glutSpecialFunc(SpecialInput);
-    
+
+    /*Translação */
+    glTranslatef(VALOR_TRANLACAO_X,VALOR_TRANLACAO_Y,0);
+
+    /*Rotação */
+    glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0);
+    glRotatef(VALOR_ROTACAO,0,0,1);
+    glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0);
+
+    if(VALOR_ESCALA != 0){
+        /*Escala*/
+        glTranslatef((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2,0); 
+        glScalef(VALOR_ESCALA,VALOR_ESCALA,0.0); // faza escala
+        glTranslatef(-(COMECO_X+FIM_X)/2,-(COMECO_Y+FIM_Y)/2,0);
+    }
+
     desenhaQuadrado();
 
-    drawBitmapText((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2);
-    glFlush(); //desenha os comandos não executados
+    drawBitmapText((COMECO_X+FIM_X)/2,(COMECO_Y+FIM_Y)/2); //Desenha Texto na Tela
+    glFlush(); 
 }
 
 int main(int argc, char** argv){
@@ -153,7 +176,7 @@ int main(int argc, char** argv){
     glutInit(&argc, argv);//inicializa o GLUT
     glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB);//modo de display
     glutInitWindowPosition(200,0);//posição inicial da janela
-    glutInitWindowSize(400,300);//largura e altura da janela
+    glutInitWindowSize(500,500);//largura e altura da janela
     glutCreateWindow("Atividade Pratica 1");//cria a janela de exibição
 
     init();//função de inicialização
