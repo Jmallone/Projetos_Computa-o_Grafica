@@ -130,7 +130,6 @@ void drawBitmapText(float x,float y) {
     }else if(TRANSLACAO == 1){
         glutBitmapString(GLUT_BITMAP_HELVETICA_18, "T");
     }else if (ROTACAO == 1){
-
         glutBitmapString(GLUT_BITMAP_HELVETICA_18, "R");
     }
 
