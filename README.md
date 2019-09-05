@@ -4,9 +4,7 @@ Projetos da Materia de Computação Gráfica - [BCC35F]
 ## Dependências :running_man:
 -[OpenGL](https://opengl.br.jaleco.com/)
 
-	$ sudo apt-get install -y gnuplot
-
-**Atividade Pratica 1**
+:pencil: **Atividade Pratica 1**
 <p align="center">
   <img src="/imgs/atv_1.gif">
 </p>
