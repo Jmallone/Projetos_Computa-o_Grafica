@@ -9,7 +9,7 @@ Projetos da Materia de Computação Gráfica - [BCC35F]
   <img src="/imgs/atv_1.gif">
 </p>
 
-**Descrição**
+**Descrição:**
 
 > O programa ao executar deve mostrar um quadrado vermelho de lado 10 alinhado
 ao canto inferior esquerdo da janela.
@@ -18,7 +18,7 @@ ao canto inferior esquerdo da janela.
 <br>• Modo de rotação: as teclas do teclado ← e → devem alterar o ângulo de rotação θ adequadamente. Adotando-se o centróide do quadrado como ponto de rotação, considerando-se eventuais transformações geométricas que ele possa ter sofrido anteriormente.
 <br><br>Para transitar entre esses dois modos, o usuário deve pressionar a teclar ‘r’ para entrar no modo de rotação e a tecla ‘t’ para entrar no modo de translação. O programa começa no modo de translação, antes de qualquer tecla ser pressionada.
 
-**Como executar**
+**Como executar:**
 
 	gcc atv_pratica1.c -o main -lGL -lglut -lGLU
 	./main
